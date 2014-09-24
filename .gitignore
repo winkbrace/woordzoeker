@@ -1,3 +1,11 @@
+.idea
+_ide_helper.php
+test.php
+/tests/_log
+/logs
+/docs
+/sql
+
 /bootstrap/compiled.php
 /vendor
 composer.phar
@@ -6,4 +14,3 @@ composer.lock
 .env.php
 .DS_Store
 Thumbs.db
-*.sql
