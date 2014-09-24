@@ -1,0 +1,46 @@
+@font-face {
+    font-family: 'KBZipaDeeDooDah';
+    src: url('../fonts/KBZipaDeeDooDah.ttf');
+}
+
+/* general */
+body {
+    font-family: Tahoma, Arial, sans-serif;
+    background: #080808 url('../img/background-rose.jpg') top center no-repeat;
+    /*min-height: 700px;*/
+}
+#container {
+}
+h1 {
+    font-family: 'KBZipaDeeDooDah', Tahoma, Arial, sans-serif;
+    width: 100%;
+    text-align: center;
+}
+
+/* woordzoeker table */
+#woordzoeker-table {
+    border-collapse: collapse;
+    margin: 30px auto;
+}
+#woordzoeker-table td {
+    width: 40px;
+    height: 40px;
+    border: 1px solid black;
+    background-color: #efefef;
+}
+
+/* size form */
+#size-form {
+    width: 400px;
+}
+#size-form label {
+    width: 150px;
+}
+#size-submit {
+    margin-top: 10px;
+    width: 210px;
+    padding: 2px 5px;
+}
+.slider-selection {
+    background: #BABABA;
+}
