@@ -1,6 +1,7 @@
 <?php namespace Woordzoeker;
 
 use DB;
+use Woordzoeker\Contract\GeneratorInterface;
 
 class WordGenerator implements GeneratorInterface
 {
@@ -11,15 +12,18 @@ class WordGenerator implements GeneratorInterface
     public function generate(array $requirements = [])
     {
         $where = $this->createWhereClause($requirements);
-        $result = DB::select("select word from words where $where", array_values($requirements));
+        $sql = "select word
+                from   words
+                where  $where
+                order by rand()
+                limit 1";
+        $result = DB::select($sql, array_values($requirements));
 
         if (empty($result)) {
             return false;
         }
 
-        $random = $result[array_rand($result)];
-
-        return $random->word;
+        return $result[0]->word;
     }
 
     /**

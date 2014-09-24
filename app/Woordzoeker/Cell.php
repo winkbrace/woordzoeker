@@ -1,5 +1,7 @@
 <?php namespace Woordzoeker;
 
+use Illuminate\Support\Contracts\RenderableInterface;
+
 class Cell
 {
     /** @var int */

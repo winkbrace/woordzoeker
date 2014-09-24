@@ -23,10 +23,11 @@ class PuzzleRenderer implements RenderableInterface
     {
         $output = '<table id="woordzoeker-table">'."\n";
 
-        for ($r = 1; $r <= $this->height; $r++) {
+        foreach ($this->grid->getGrid() as $row) {
             $output .= "    <tr>\n";
-            for ($c = 1; $c <= $this->width; $c++) {
-                $output .= "        <td></td>\n";
+            foreach ($row as $cell) {
+                /** @var Cell $cell */
+                $output .= "        <td>" . $cell->value . "</td>\n";
             }
             $output .= "    </tr>\n";
         }

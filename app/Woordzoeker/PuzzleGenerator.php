@@ -1,5 +1,7 @@
 <?php namespace Woordzoeker;
 
+use Woordzoeker\Contract\GeneratorInterface;
+
 class PuzzleGenerator implements GeneratorInterface
 {
     /** @var \Woordzoeker\WordGenerator */
@@ -15,6 +17,9 @@ class PuzzleGenerator implements GeneratorInterface
 
     public function generate()
     {
-        // TODO: Implement generate() method.
+        $word = $this->wordGenerator->generate();
+        dd($word);
+        // TODO continue
+        
     }
 }

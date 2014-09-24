@@ -1,4 +1,4 @@
-<?php namespace Woordzoeker;
+<?php namespace Woordzoeker\Contract;
 
 interface GeneratorInterface
 {

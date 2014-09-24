@@ -7,21 +7,44 @@ use Woordzoeker\WordGenerator;
 class HomeController extends BaseController
 {
 
+    /**
+     * default opening view
+     * @return \Illuminate\View\View
+     */
 	public function index()
 	{
-        $data = [
-            'table' => new \Woordzoeker\PuzzleRenderer(10, 10),
-        ];
+        $grid = new Grid(10, 10);
 
-		return View::make('home', $data);
+        return $this->createView($grid);
 	}
 
+    /**
+     * view
+     */
     public function setSize()
     {
         $rows = Input::get('rows');
         $cols = Input::get('cols');
 
-        $puzzle = new PuzzleGenerator(new WordGenerator(), new Grid($rows, $cols));
+        $grid = new Grid($rows, $cols);
+
+        return $this->createView($grid);
+    }
+
+    /**
+     * @param Grid $grid
+     * @return \Illuminate\View\View
+     */
+    private function createView($grid)
+    {
+        $puzzle = new PuzzleGenerator(new WordGenerator(), $grid);
+        $puzzle->generate();
+
+        $data = [
+            'table' => new \Woordzoeker\PuzzleRenderer($grid),
+        ];
+
+        return View::make('home', $data);
     }
 
 }
