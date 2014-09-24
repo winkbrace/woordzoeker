@@ -2,21 +2,17 @@
 
 use Illuminate\Support\Contracts\RenderableInterface;
 
-class TableRenderer implements RenderableInterface
+class PuzzleRenderer implements RenderableInterface
 {
-    /** @var int */
-    protected $width;
-    /** @var int */
-    protected $height;
+    /** @var Grid */
+    private $grid;
 
     /**
-     * @param int $width
-     * @param int $height
+     * @param \Woordzoeker\Grid $grid
      */
-    public function __construct($width, $height)
+    public function __construct(Grid $grid)
     {
-        $this->width = $width;
-        $this->height = $height;
+        $this->grid = $grid;
     }
 
     /**
@@ -25,7 +21,7 @@ class TableRenderer implements RenderableInterface
      */
     public function render()
     {
-        $output = "<table>\n";
+        $output = '<table id="woordzoeker-table">'."\n";
 
         for ($r = 1; $r <= $this->height; $r++) {
             $output .= "    <tr>\n";
@@ -35,7 +31,7 @@ class TableRenderer implements RenderableInterface
             $output .= "    </tr>\n";
         }
 
-        $output .= "</table/>\n";
+        $output .= "</table>\n";
 
         return $output;
     }
