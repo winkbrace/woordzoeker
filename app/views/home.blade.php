@@ -3,6 +3,10 @@
 @section('content')
 {{ $table }}
 
+<div class="words-list center-block round">
+    {{ implode(', ', $words) }}
+</div>
+
 <div class="center-block" id="size-form">
     <form method="post" action="" >
         {{ Form::token() }}

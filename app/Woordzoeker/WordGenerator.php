@@ -40,14 +40,27 @@ class WordGenerator implements GeneratorInterface
             return '1';
         }
 
+        $this->validateRequirements($requirements);
+
         $conditions = [];
         foreach ($requirements as $key => $val) {
-            if ($key == 'length' && ($val < self::MIN_WORD_LENGTH || $val > self::MAX_WORD_LENGTH)) {
-                throw new \Exception('Invalid word length requirement given: ' . $val);
-            }
             $conditions[] = "`$key` = ?";
         }
 
         return implode("\n and ", $conditions);
+    }
+
+    /**
+     * @param array $requirements
+     * @throws \Exception
+     */
+    private function validateRequirements(array $requirements)
+    {
+        if (array_key_exists('length', $requirements)) {
+            $length = $requirements['length'];
+            if ($length < self::MIN_WORD_LENGTH || $length > self::MAX_WORD_LENGTH) {
+                throw new \Exception('Invalid word length requirement given: ' . $length);
+            }
+        }
     }
 }

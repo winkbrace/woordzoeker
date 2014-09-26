@@ -41,4 +41,13 @@ class Line
     {
         return count($this->line);
     }
+
+    /**
+     * reverse the cells in the line
+     * This is the easiest way to handle reversed words
+     */
+    public function reverse()
+    {
+        $this->line = array_reverse($this->line);
+    }
 }

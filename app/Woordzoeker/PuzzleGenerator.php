@@ -4,10 +4,15 @@ use Woordzoeker\Contract\GeneratorInterface;
 
 class PuzzleGenerator implements GeneratorInterface
 {
+    const DIRECTION_NORMAL = 'normal';
+    const DIRECTION_REVERSE = 'reverse';
+
     /** @var \Woordzoeker\WordGenerator */
     private $wordGenerator;
     /** @var Grid */
     private $grid;
+    /** @var string[] */
+    private $placedWords;
 
     /**
      * @param \Woordzoeker\WordGenerator $wordGenerator
@@ -38,20 +43,23 @@ class PuzzleGenerator implements GeneratorInterface
         $length = $length > 15 ? 15 : $length;
         $word = $this->wordGenerator->generate(['length' => $length]);
         // then place at random place in random row
-        $this->setWordInLine($this->grid->getRandomRow(), $word, 0);
+        $this->placeWord($this->grid->getRandomRow(), $word, 0, $this->getRandomDirection());
     }
 
     /**
      * @param \Woordzoeker\Line $line
      * @param string $word
      * @param int $offset
+     * @param string $direction
      */
-    private function setWordInLine(Line $line, $word, $offset)
+    private function placeWord(Line $line, $word, $offset, $direction)
     {
         for ($i = $offset, $w = 0; $i < strlen($word) + $offset; $i++, $w++) {
             $cell = $line->getCellAt($i);
             $cell->value = $word[$w];
         }
+
+        $this->placedWords[] = $word;
     }
 
     private function setFirstColumnWords()
@@ -70,13 +78,14 @@ class PuzzleGenerator implements GeneratorInterface
                 $col = $this->grid->getCol($i);
                 $wordLength = $this->getRandomWordLength($col);
                 $offset = $this->getRandomOffset($col, $wordLength);
-                $requirements = $this->createWordRequirements($col, $wordLength, $offset);
+                $direction = $this->getRandomDirection();
+                $requirements = $this->createWordRequirements($col, $wordLength, $offset, $direction);
 
                 // create word
                 $word = $this->wordGenerator->generate($requirements);
             } while ($word === false && ++$count <= 10);
 
-            $this->setWordInLine($col, $word, $offset);
+            $this->placeWord($col, $word, $offset, $direction);
         }
     }
 
@@ -117,10 +126,14 @@ class PuzzleGenerator implements GeneratorInterface
      * @param Line $col
      * @param int $wordLength
      * @param int $offset
+     * @param string $direction
      * @return array
      */
-    private function createWordRequirements(Line $col, $wordLength, $offset)
+    private function createWordRequirements(Line $col, $wordLength, $offset, $direction)
     {
+        if ($direction == self::DIRECTION_REVERSE) {
+            $col->reverse();
+        }
         $requirements = ['length' => $wordLength];
         for ($j = $offset; $j < $wordLength + $offset; $j++) {
             $cell = $col->getCellAt($j);
@@ -130,5 +143,22 @@ class PuzzleGenerator implements GeneratorInterface
         }
 
         return $requirements;
+    }
+
+    /**
+     * @return string
+     */
+    private function getRandomDirection()
+    {
+        $pool = [self::DIRECTION_NORMAL, self::DIRECTION_REVERSE];
+        return $pool[array_rand($pool)];
+    }
+
+    /**
+     * @return \string[]
+     */
+    public function getPlacedWords()
+    {
+        return $this->placedWords;
     }
 }
