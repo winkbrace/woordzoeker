@@ -125,11 +125,10 @@ class PuzzleGenerator implements GeneratorInterface
         for ($j = $offset; $j < $wordLength + $offset; $j++) {
             $cell = $col->getCellAt($j);
             if ($cell->hasLetter()) {
-                $requirements[$j] = $cell->value;
+                $requirements[$j - $offset] = $cell->value;
             }
         }
-        // TODO fix
-var_dump($wordLength, $offset, $requirements);
+
         return $requirements;
     }
 }
