@@ -42,6 +42,8 @@ class HomeController extends BaseController
 
         $data = [
             'table' => new \Woordzoeker\PuzzleRenderer($grid),
+            'sliderRowValue' => $grid->getWidth(),
+            'sliderColValue' => $grid->getHeight(),
         ];
 
         return View::make('home', $data);

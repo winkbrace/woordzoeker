@@ -5,6 +5,9 @@ use Woordzoeker\Contract\GeneratorInterface;
 
 class WordGenerator implements GeneratorInterface
 {
+    const MIN_WORD_LENGTH = 4;
+    const MAX_WORD_LENGTH = 15;
+
     /**
      * @param array $requirements
      * @return string|false
@@ -28,6 +31,7 @@ class WordGenerator implements GeneratorInterface
 
     /**
      * @param array $requirements
+     * @throws \Exception
      * @return string
      */
     private function createWhereClause(array $requirements)
@@ -38,6 +42,9 @@ class WordGenerator implements GeneratorInterface
 
         $conditions = [];
         foreach ($requirements as $key => $val) {
+            if ($key == 'length' && ($val < self::MIN_WORD_LENGTH || $val > self::MAX_WORD_LENGTH)) {
+                throw new \Exception('Invalid word length requirement given: ' . $val);
+            }
             $conditions[] = "`$key` = ?";
         }
 

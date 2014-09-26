@@ -15,3 +15,7 @@ composer.lock
 .DS_Store
 Thumbs.db
 _ide_helper.php
+.idea/vcs.xml
+.idea/vcs.xml
+.idea/woordzoeker.iml
+.idea/workspace.xml

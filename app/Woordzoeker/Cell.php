@@ -22,4 +22,12 @@ class Cell
         $this->colIndex = $colIndex;
         $this->value = $value;
     }
+
+    /**.
+     * @return bool
+     */
+    public function hasLetter()
+    {
+        return ! empty($this->value);
+    }
 }

@@ -23,8 +23,8 @@ class Grid
     private function createGrid()
     {
         $this->grid = [];
-        for ($r=0; $r<$this->rows; $r++) {
-            for ($c=0; $c<$this->cols; $c++) {
+        for ($r = 0; $r < $this->rows; $r++) {
+            for ($c = 0; $c < $this->cols; $c++) {
                 $this->grid[$r][$c] = new Cell($r, $c);
             }
         }
@@ -59,5 +59,45 @@ class Grid
         }
 
         return new Line($line);
+    }
+
+    /**
+     * @return int
+     */
+    public function getWidth()
+    {
+        return $this->cols;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHeight()
+    {
+        return $this->rows;
+    }
+
+    /**
+     * @return Line
+     */
+    public function getRandomRow()
+    {
+        return new Line($this->grid[array_rand($this->grid)]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFilled()
+    {
+        foreach ($this->grid as $row) {
+            foreach ($row as $cell) {
+                if (empty($cell->value)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }
