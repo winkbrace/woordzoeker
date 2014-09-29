@@ -50,4 +50,17 @@ class Line
     {
         $this->line = array_reverse($this->line);
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        $output = '';
+        foreach ($this->line as $cell) {
+            $output .= $cell->__toString() . "\t";
+        }
+
+        return $output . " <br/>\n";
+    }
 }

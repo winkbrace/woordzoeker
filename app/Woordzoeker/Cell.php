@@ -1,7 +1,5 @@
 <?php namespace Woordzoeker;
 
-use Illuminate\Support\Contracts\RenderableInterface;
-
 class Cell
 {
     /** @var int */
@@ -29,5 +27,13 @@ class Cell
     public function hasLetter()
     {
         return ! empty($this->value);
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return '[' . $this->rowIndex . '][' . $this->colIndex . '] => ' . $this->value;
     }
 }

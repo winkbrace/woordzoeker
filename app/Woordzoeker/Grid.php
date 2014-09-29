@@ -5,29 +5,39 @@ class Grid
     /** @var array */
     private $grid;
     /** @var int */
-    private $rows;
+    private $rowCount;
     /** @var int */
+    private $colCount;
+    /** @var Line */
+    private $rows;
+    /** @var Line */
     private $cols;
+    /** @var Line[] */
+    private $diagonals;
 
     /**
-     * @param int $rows
-     * @param int $cols
+     * @param int $rowCount
+     * @param int $colCount
      */
-    public function __construct($rows, $cols)
+    public function __construct($rowCount, $colCount)
     {
-        $this->rows = $rows;
-        $this->cols = $cols;
+        $this->rowCount = $rowCount;
+        $this->colCount = $colCount;
         $this->createGrid();
     }
 
     private function createGrid()
     {
         $this->grid = [];
-        for ($r = 0; $r < $this->rows; $r++) {
-            for ($c = 0; $c < $this->cols; $c++) {
+        for ($r = 0; $r < $this->rowCount; $r++) {
+            for ($c = 0; $c < $this->colCount; $c++) {
                 $this->grid[$r][$c] = new Cell($r, $c);
             }
         }
+
+        $this->setRows();
+        $this->setCols();
+        $this->setDiagonals();
     }
 
     /**
@@ -44,7 +54,7 @@ class Grid
      */
     public function getRow($rowIndex)
     {
-        return new Line($this->grid[$rowIndex]);
+        return $this->rows[$rowIndex];
     }
 
     /**
@@ -53,12 +63,31 @@ class Grid
      */
     public function getCol($colIndex)
     {
-        $line = [];
-        foreach ($this->grid as $row) {
-            $line[] = $row[$colIndex];
-        }
+        return $this->cols[$colIndex];
+    }
 
-        return new Line($line);
+    /**
+     * @return Line
+     */
+    public function getCols()
+    {
+        return $this->cols;
+    }
+
+    /**
+     * @return Line
+     */
+    public function getRows()
+    {
+        return $this->rows;
+    }
+
+    /**
+     * @return \Woordzoeker\Line[]
+     */
+    public function getDiagonals()
+    {
+        return $this->diagonals;
     }
 
     /**
@@ -66,7 +95,7 @@ class Grid
      */
     public function getWidth()
     {
-        return $this->cols;
+        return $this->colCount;
     }
 
     /**
@@ -74,7 +103,7 @@ class Grid
      */
     public function getHeight()
     {
-        return $this->rows;
+        return $this->rowCount;
     }
 
     /**
@@ -99,5 +128,77 @@ class Grid
         }
 
         return true;
+    }
+
+    public function setRows()
+    {
+        foreach ($this->grid as $i => $row) {
+            $this->rows[$i] = new Line($row);;
+        }
+    }
+
+    public function setCols()
+    {
+        $cols = [];
+        foreach ($this->grid as $r => $row) {
+            foreach ($row as $c => $cell) {
+                $cols[$c][$r] = $cell;
+            }
+        }
+
+        foreach ($cols as $line) {
+            $this->cols[] = new Line($line);
+        }
+    }
+
+    private function setDiagonals()
+    {
+        $this->diagonals = [];
+
+        // top left to bottom right. min word length is 4.
+        // top left moving down
+        for ($i = 0; $i < $this->rowCount - 3; $i++) {
+            $line = [];
+            for ($r = $i, $c = 0; $r < $this->rowCount; $r++, $c++) {
+                $line[] = $this->getCell($r, $c);
+            }
+            $this->diagonals[] = new Line($line);
+        }
+        // top left moving right
+        for ($i = 1; $i < $this->colCount - 3; $i++) {
+            $line = [];
+            for ($c = $i, $r = 0; $c < $this->colCount; $r++, $c++) {
+                $line[] = $this->getCell($r, $c);
+            }
+            $this->diagonals[] = new Line($line);
+        }
+        // top right to bottom left
+        // top left moving right
+        for ($i = 3; $i < $this->colCount - 1; $i++) {
+            $line = [];
+            for ($c = $i, $r = 0; $c >= 0; $r++, $c--) {
+                $line[] = $this->getCell($r, $c);
+            }
+            $this->diagonals[] = new Line($line);
+        }
+        // top right moving down
+        for ($i = 0; $i < $this->rowCount - 3; $i++) {
+            $line = [];
+            for ($r = $i, $c = $this->colCount - 1; $r < $this->rowCount; $r++, $c--) {
+                $line[] = $this->getCell($r, $c);
+            }
+            $this->diagonals[] = new Line($line);
+        }
+
+    }
+
+    /**
+     * @param int $rowIndex
+     * @param int $colIndex
+     * @return Cell
+     */
+    private function getCell($rowIndex, $colIndex)
+    {
+        return $this->grid[$rowIndex][$colIndex];
     }
 }

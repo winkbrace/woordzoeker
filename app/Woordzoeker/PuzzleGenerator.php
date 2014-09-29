@@ -12,7 +12,7 @@ class PuzzleGenerator implements GeneratorInterface
     /** @var Grid */
     private $grid;
     /** @var string[] */
-    private $placedWords;
+    private $placedWords = [];
 
     /**
      * @param \Woordzoeker\WordGenerator $wordGenerator
@@ -31,6 +31,7 @@ class PuzzleGenerator implements GeneratorInterface
     {
         $this->setFirstWord();
         $this->setFirstColumnWords();
+        $this->setDiagonals();
         // TODO continue
 
     }
@@ -43,16 +44,15 @@ class PuzzleGenerator implements GeneratorInterface
         $length = $length > 15 ? 15 : $length;
         $word = $this->wordGenerator->generate(['length' => $length]);
         // then place at random place in random row
-        $this->placeWord($this->grid->getRandomRow(), $word, 0, $this->getRandomDirection());
+        $this->placeWord($this->grid->getRandomRow(), $word, 0);
     }
 
     /**
      * @param \Woordzoeker\Line $line
      * @param string $word
      * @param int $offset
-     * @param string $direction
      */
-    private function placeWord(Line $line, $word, $offset, $direction)
+    private function placeWord(Line $line, $word, $offset)
     {
         for ($i = $offset, $w = 0; $i < strlen($word) + $offset; $i++, $w++) {
             $cell = $line->getCellAt($i);
@@ -85,7 +85,7 @@ class PuzzleGenerator implements GeneratorInterface
                 $word = $this->wordGenerator->generate($requirements);
             } while ($word === false && ++$count <= 10);
 
-            $this->placeWord($col, $word, $offset, $direction);
+            $this->placeWord($col, $word, $offset);
         }
     }
 
@@ -160,5 +160,11 @@ class PuzzleGenerator implements GeneratorInterface
     public function getPlacedWords()
     {
         return $this->placedWords;
+    }
+
+    private function setDiagonals()
+    {
+        $diagonals = $this->grid->getDiagonals();
+        // TODO continue;
     }
 }
