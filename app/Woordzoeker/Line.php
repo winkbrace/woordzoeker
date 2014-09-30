@@ -52,6 +52,21 @@ class Line
     }
 
     /**
+     * @return int number of cells that have no letter yet
+     */
+    public function freeCellCount()
+    {
+        $count = 0;
+        foreach ($this->line as $cell) {
+            if (! $cell->hasLetter()) {
+                $count++;
+            }
+        }
+
+        return $count;
+    }
+
+    /**
      * @return string
      */
     public function __toString()

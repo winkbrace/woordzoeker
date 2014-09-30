@@ -30,10 +30,12 @@ class PuzzleGenerator implements GeneratorInterface
     public function generate()
     {
         $this->setFirstWord();
-        $this->setFirstColumnWords();
-        $this->setDiagonals();
+        $this->generateWordsInColumns();
+        $this->generateWordsInDiagonals();
+        $this->generateWordsInRows();
         // TODO continue
-
+        // loop over all Lines and when it has 4 or more free cells, attempt to place
+        // another word there (just same 10 tries logic)
     }
 
     private function setFirstWord()
@@ -45,6 +47,57 @@ class PuzzleGenerator implements GeneratorInterface
         $word = $this->wordGenerator->generate(['length' => $length]);
         // then place at random place in random row
         $this->placeWord($this->grid->getRandomRow(), $word, 0);
+    }
+
+    private function generateWordsInColumns()
+    {
+        foreach ($this->grid->getColumns() as $col) {
+            if ($this->getRandomPercentage() < 60) {
+                $this->placeRandomWord($col);
+            }
+        }
+    }
+
+    private function generateWordsInDiagonals()
+    {
+        foreach ($this->grid->getDiagonals() as $diagonal) {
+            if ($this->getRandomPercentage() < 50) {
+                $this->placeRandomWord($diagonal);
+            }
+        }
+    }
+
+    private function generateWordsInRows()
+    {
+        foreach ($this->grid->getRows() as $row) {
+            if ($this->getRandomPercentage() < 60) {
+                $this->placeRandomWord($row);
+            }
+        }
+    }
+
+    /**
+     * @param Line $line
+     */
+    private function placeRandomWord(Line $line)
+    {
+        if ($line->freeCellCount() < 3) {
+            return;
+        }
+
+        $count = 0;
+        do {
+            // determine random requirements for word at this line
+            $wordLength = $this->getRandomWordLength($line);
+            $offset = $this->getRandomOffset($line, $wordLength);
+            $direction = $this->getRandomDirection();
+            $requirements = $this->createWordRequirements($line, $wordLength, $offset, $direction);
+
+            // create word
+            $word = $this->wordGenerator->generate($requirements);
+        } while ($word === false && ++$count <= 10);
+
+        $this->placeWord($line, $word, $offset);
     }
 
     /**
@@ -60,33 +113,6 @@ class PuzzleGenerator implements GeneratorInterface
         }
 
         $this->placedWords[] = $word;
-    }
-
-    private function setFirstColumnWords()
-    {
-        // put a word in horizontal direction for ~60% of the columns
-        $columns = [];
-        for ($i = 0; $i < $this->grid->getWidth(); $i++) {
-            if ($this->getRandomPercentage() < 60) {
-                $columns[] = $i;
-            }
-        }
-        foreach ($columns as $i) {
-            $count = 0;
-            do {
-                // determine random requirements for word at col $i
-                $col = $this->grid->getCol($i);
-                $wordLength = $this->getRandomWordLength($col);
-                $offset = $this->getRandomOffset($col, $wordLength);
-                $direction = $this->getRandomDirection();
-                $requirements = $this->createWordRequirements($col, $wordLength, $offset, $direction);
-
-                // create word
-                $word = $this->wordGenerator->generate($requirements);
-            } while ($word === false && ++$count <= 10);
-
-            $this->placeWord($col, $word, $offset);
-        }
     }
 
     /**
@@ -160,11 +186,5 @@ class PuzzleGenerator implements GeneratorInterface
     public function getPlacedWords()
     {
         return $this->placedWords;
-    }
-
-    private function setDiagonals()
-    {
-        $diagonals = $this->grid->getDiagonals();
-        // TODO continue;
     }
 }

@@ -69,7 +69,7 @@ class Grid
     /**
      * @return Line
      */
-    public function getCols()
+    public function getColumns()
     {
         return $this->cols;
     }
