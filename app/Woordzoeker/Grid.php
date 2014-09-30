@@ -67,7 +67,7 @@ class Grid
     }
 
     /**
-     * @return Line
+     * @return \Woordzoeker\Line[]
      */
     public function getColumns()
     {
@@ -75,7 +75,7 @@ class Grid
     }
 
     /**
-     * @return Line
+     * @return \Woordzoeker\Line[]
      */
     public function getRows()
     {
@@ -88,6 +88,24 @@ class Grid
     public function getDiagonals()
     {
         return $this->diagonals;
+    }
+
+    /**
+     * @return Line[]
+     */
+    public function getAllLines()
+    {
+        $lines = [];
+        foreach ($this->rows as $line) {
+            $lines[] = $line;
+        }
+        foreach ($this->cols as $line) {
+            $lines[] = $line;
+        }
+        foreach ($this->diagonals as $line) {
+            $lines[] = $line;
+        }
+        return $lines;
     }
 
     /**

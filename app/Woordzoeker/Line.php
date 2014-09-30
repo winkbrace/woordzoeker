@@ -35,6 +35,21 @@ class Line
     }
 
     /**
+     * @return Cell[]
+     */
+    public function getEmptyCells()
+    {
+        $cells = [];
+        foreach ($this->line as $cell) {
+            if (! $cell->hasLetter()) {
+                $cells[] = $cell;
+            }
+        }
+
+        return $cells;
+    }
+
+    /**
      * @return int
      */
     public function getLength()

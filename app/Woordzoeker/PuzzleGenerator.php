@@ -29,13 +29,25 @@ class PuzzleGenerator implements GeneratorInterface
      */
     public function generate()
     {
+        // fill initially
         $this->setFirstWord();
         $this->generateWordsInColumns();
         $this->generateWordsInDiagonals();
         $this->generateWordsInRows();
-        // TODO continue
-        // loop over all Lines and when it has 4 or more free cells, attempt to place
-        // another word there (just same 10 tries logic)
+
+        // fill empty areas
+        foreach ($this->grid->getAllLines() as $line) {
+            if ($line->freeCellCount() > 3) {
+                $this->placeRandomWord($line);
+            }
+        }
+
+        // fill remaining empty cells with random letters
+        foreach ($this->grid->getRows() as $row) {
+            foreach ($row->getEmptyCells() as $cell) {
+                $cell->value = $this->getRandomLetter();
+            }
+        }
     }
 
     private function setFirstWord()
@@ -149,6 +161,15 @@ class PuzzleGenerator implements GeneratorInterface
     }
 
     /**
+     * @return string
+     */
+    private function getRandomLetter()
+    {
+        $alphabet = range('a', 'z');
+        return $alphabet[array_rand($alphabet)];
+    }
+
+    /**
      * @param Line $col
      * @param int $wordLength
      * @param int $offset
@@ -181,10 +202,13 @@ class PuzzleGenerator implements GeneratorInterface
     }
 
     /**
-     * @return \string[]
+     * @return string[]
      */
     public function getPlacedWords()
     {
+        $this->placedWords = array_filter($this->placedWords);
+        sort($this->placedWords);
+
         return $this->placedWords;
     }
 }
