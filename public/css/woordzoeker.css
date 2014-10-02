@@ -32,14 +32,19 @@ h1 {
 }
 
 /* canvas */
-#canvas-container-container {
+.canvas-container-container {
     position: absolute;
     top: 94px;
     width: 100%;
 }
-#canvas-container {
-    z-index: 2;
+.canvas-container {
     margin: 0 auto;
+}
+#canvas-found {
+    z-index: 2;
+}
+#canvas {
+    z-index: 3;
 }
 
 /* words list */

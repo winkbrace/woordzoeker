@@ -2,6 +2,8 @@
 
 use Woordzoeker\Contract\GeneratorInterface;
 
+set_time_limit(120);
+
 class PuzzleGenerator implements GeneratorInterface
 {
     const DIRECTION_NORMAL = 'normal';
