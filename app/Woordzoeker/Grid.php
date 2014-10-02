@@ -21,6 +21,13 @@ class Grid
      */
     public function __construct($rowCount, $colCount)
     {
+        if ($rowCount < 5 || $colCount < 5) {
+            throw new \InvalidArgumentException('The grid needs to be at least 5 letters wide and high.');
+        }
+        if ($rowCount > 20 || $colCount > 20) {
+            throw new \InvalidArgumentException('The grid cannot exceed 20 letters in width and height.');
+        }
+
         $this->rowCount = $rowCount;
         $this->colCount = $colCount;
         $this->createGrid();
@@ -132,30 +139,14 @@ class Grid
         return new Line($this->grid[array_rand($this->grid)]);
     }
 
-    /**
-     * @return bool
-     */
-    public function isFilled()
-    {
-        foreach ($this->grid as $row) {
-            foreach ($row as $cell) {
-                if (empty($cell->value)) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    public function setRows()
+    private function setRows()
     {
         foreach ($this->grid as $i => $row) {
             $this->rows[$i] = new Line($row);;
         }
     }
 
-    public function setCols()
+    private function setCols()
     {
         $cols = [];
         foreach ($this->grid as $r => $row) {
@@ -180,7 +171,7 @@ class Grid
             for ($r = $i, $c = 0; $r < $this->rowCount; $r++, $c++) {
                 $line[] = $this->getCell($r, $c);
             }
-            $this->diagonals[] = new Line($line);
+            $this->addToDiagonals($line);
         }
         // top left moving right
         for ($i = 1; $i < $this->colCount - 3; $i++) {
@@ -188,7 +179,7 @@ class Grid
             for ($c = $i, $r = 0; $c < $this->colCount; $r++, $c++) {
                 $line[] = $this->getCell($r, $c);
             }
-            $this->diagonals[] = new Line($line);
+            $this->addToDiagonals($line);
         }
         // top right to bottom left
         // top left moving right
@@ -197,7 +188,7 @@ class Grid
             for ($c = $i, $r = 0; $c >= 0; $r++, $c--) {
                 $line[] = $this->getCell($r, $c);
             }
-            $this->diagonals[] = new Line($line);
+            $this->addToDiagonals($line);
         }
         // top right moving down
         for ($i = 0; $i < $this->rowCount - 3; $i++) {
@@ -205,9 +196,19 @@ class Grid
             for ($r = $i, $c = $this->colCount - 1; $r < $this->rowCount; $r++, $c--) {
                 $line[] = $this->getCell($r, $c);
             }
-            $this->diagonals[] = new Line($line);
+            $this->addToDiagonals($line);
         }
+    }
 
+    /**
+     * @param Cell[] $cells
+     */
+    private function addToDiagonals(array $cells)
+    {
+        $cells = array_filter($cells);
+        if (count($cells) >= 4) {
+            $this->diagonals[] = new Line($cells);
+        }
     }
 
     /**
@@ -217,6 +218,10 @@ class Grid
      */
     private function getCell($rowIndex, $colIndex)
     {
+        if (! isset($this->grid[$rowIndex]) || ! isset($this->grid[$rowIndex][$colIndex])) {
+            return null;
+        }
+
         return $this->grid[$rowIndex][$colIndex];
     }
 }

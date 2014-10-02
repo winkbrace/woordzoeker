@@ -2,6 +2,11 @@
 
 @section('content')
 {{ $table }}
+<div id="canvas-container-container">
+    <div id="canvas-container" style="width:{{ $width }}px;">
+        <canvas id="canvas" width="{{ $width }}" height="{{ $height }}"></canvas>
+    </div>
+</div>
 
 <div class="words-list center-block round">
     {{ implode(', ', $words) }}

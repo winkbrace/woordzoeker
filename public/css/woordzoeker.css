@@ -31,6 +31,17 @@ h1 {
     text-align: center;
 }
 
+/* canvas */
+#canvas-container-container {
+    position: absolute;
+    top: 94px;
+    width: 100%;
+}
+#canvas-container {
+    z-index: 2;
+    margin: 0 auto;
+}
+
 /* words list */
 .words-list {
     width: 400px;

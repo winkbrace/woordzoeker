@@ -10,6 +10,12 @@ class Line
      */
     public function __construct(array $line)
     {
+        foreach ($line as $cell) {
+            if (! $cell instanceof Cell) {
+                throw new \InvalidArgumentException('array of Cell objects required to create Line.');
+            }
+        }
+
         $this->line = $line;
     }
 
