@@ -5,6 +5,7 @@ test.php
 /logs
 /docs
 /sql
+/private
 
 /bootstrap/compiled.php
 /vendor

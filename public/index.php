@@ -5,6 +5,10 @@
  * @package  Laravel
  * @author   Taylor Otwell <taylorotwell@gmail.com>
  */
+ 
+if (! defined('APPLICATION_ENV')) {
+    define('APPLICATION_ENV', getenv('APPLICATION_ENV') ?: 'production');
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +22,11 @@
 |
 */
 
-require __DIR__.'/../bootstrap/autoload.php';
+if (APPLICATION_ENV == 'production') {
+	require __DIR__.'/../woordzoeker/bootstrap/autoload.php';
+} else {
+	require __DIR__.'/../bootstrap/autoload.php';
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -32,7 +40,11 @@ require __DIR__.'/../bootstrap/autoload.php';
 |
 */
 
-$app = require_once __DIR__.'/../bootstrap/start.php';
+if (APPLICATION_ENV == 'production') {
+	$app = require_once __DIR__.'/../woordzoeker/bootstrap/start.php';
+} else {
+	$app = require_once __DIR__.'/../bootstrap/start.php';
+}
 
 /*
 |--------------------------------------------------------------------------
