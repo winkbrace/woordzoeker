@@ -52,7 +52,7 @@ return array(
 			'prefix'   => '',
 		),
 
-		'mysql' => require __DIR__ . '../../private/mysql.php',
+		'mysql' => require __DIR__ . '/../../private/mysql.php',
 
 		'pgsql' => array(
 			'driver'   => 'pgsql',
